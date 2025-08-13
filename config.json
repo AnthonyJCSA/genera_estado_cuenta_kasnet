@@ -45,11 +45,11 @@
   },
 
   "correo": {
-  "remitente": "noreply@kasnet.com",
-  "smtp_host": "email-smtp.us-east-1.amazonaws.com",
+  "remitente": "",
+  "smtp_host": "",
   "smtp_port": 465,
-  "smtp_user": "AKIAWOAVSRCS73GGVNHD",
-  "smtp_password": "BC0yn/GUk1LyYW2nT6DwWW4J8JITh7CnM9fAVyuRl3U4",
+  "smtp_user": "",
+  "smtp_password": "",
   "asunto": "📣 ¡Agente, llegaron tus estados de cuenta de {NOMBRE_MES} {ANIO}!",
   "mensaje": "¡Hola, agente!\nTe enviamos los estados de cuenta correspondientes al mes de {NOMBRE_MES} {ANIO}.\nPor favor, revísalos detalladamente.\nAtentamente,\n\nKasNet Perú.",
   "destinatario_pruebas": "prasimon@kasnet.com",
