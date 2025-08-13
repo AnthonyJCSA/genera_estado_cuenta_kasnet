@@ -1,0 +1,23 @@
+# Excluir PDFs generados
+output/pdfs/
+*.pdf
+
+# Excluir logs de ejecución
+*.log
+
+# Cache de Python
+__pycache__/
+*.pyc
+
+# Archivos ocultos de VSCode
+.vscode/
+
+# Credenciales de AWS
+modules/aws_credentials.py
+
+# Credenciales de AWS
+modules/test.py
+
+# Excluir PARQUET
+parquet/
+*.parquet

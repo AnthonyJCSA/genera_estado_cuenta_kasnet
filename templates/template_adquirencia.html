@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Estado de Cuenta - Agente {{ cod_agente }}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.4;
+    font-size: 11px;
+    color: #000;
+    margin: 0;
+    padding: 0;
+  }
+
+  .header {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .header img {
+    width: 100%;
+    max-height: 90px;
+    display: block;
+  }
+
+  h1 {
+    font-size: 14px;
+    margin: 8px 0;
+    font-weight: bold;
+  }
+
+  .info-text {
+    margin-bottom: 15px;
+    font-size: 11px;
+  }
+
+  .info-text p {
+    margin: 2px 0;
+  }
+
+  .info-text strong {
+    font-weight: bold;
+  }
+
+  table {
+    border-collapse: collapse;
+    margin-top: 8px;
+  }
+
+  .tabla-general {
+    width: 100%;
+    border: 1px solid #004990;
+  }
+
+  .tabla-general th, .tabla-general td {
+    border: 1px solid #004990;
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .tabla-general th {
+    background-color: #FFD200;
+    color: #004990;
+    font-weight: bold;
+  }
+
+  .subtotal {
+    background-color: #004990;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .bloque {
+    border: 1px solid #004990;
+    background-color: #fff;
+    padding: 6px;
+    font-size: 10.5px;
+    margin-bottom: 5px;
+  }
+
+  .bloque h3 {
+    margin: 0 0 3px 0;
+    font-size: 11px;
+    background-color: #004990;
+    color: white;
+    padding: 4px;
+  }
+
+.footer {
+  text-align: center;
+  font-size: 9px;
+  color: #004990;
+  margin-top: 50px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- PRIMERA PÁGINA -->
+<div class="header">
+  <img src="data:image/png;base64,{{ logo_base64 }}" alt="Kasnet Encabezado">
+</div>
+
+<h1>Listado de Operaciones de Adquirencia del Mes - Agente KasNet</h1>
+
+<div class="info-text">
+  <p><strong>ID.Agente:</strong> {{ cod_agente }} - <strong>{{ nombre_agente }}</strong></p>
+  <p><strong>Periodo:</strong> {{ nombre_mes }} {{ anio }}</p>
+  <p><strong>Titular:</strong> {{ titular }}</p>
+  <p><strong>Dirección:</strong> {{ direccion }}</p>
+  <p><strong>Provincia:</strong> {{ provincia }} - <strong>Departamento:</strong> {{ departamento }}</p>
+</div>
+
+<table style="width:100%;">
+<tr>
+<td style="width:65%; vertical-align:top;">
+
+  <!-- RESUMEN ADQUIRENCIA -->
+  <table class="tabla-general">
+    <thead>
+      <tr>
+        <th style="width:18%;">FECHA</th>
+        <th>CANTIDAD DE OPERACIONES</th>
+        <th>IMPORTE DE VENTA (S/)</th>
+        <th>COMISIÓN VENTA Inc. IGV (S/)</th>
+        <th>IMPORTE ABONADO (S/)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in resumen_adquirencia %}
+      <tr>
+        <td>{{ item.fecha }}</td>
+        <td>{{ item.cantidad }}</td>
+        <td style="text-align:right;">{{ item.importe_venta | round(2) }}</td>
+        <td style="text-align:right;">{{ item.comision_venta | round(2) }}</td>
+        <td style="text-align:right;">{{ item.importe_abonado | round(2) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr class="subtotal">
+        <td>Total</td>
+        <td>{{ total_cantidad }}</td>
+        <td style="text-align:right;">{{ total_importe_venta | default(0) | round(2) }}</td>
+        <td style="text-align:right;">{{ total_comision_venta | default(0) | round(2) }}</td>
+        <td style="text-align:right;">{{ total_importe_abonado | default(0) | round(2) }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+</td>
+<td style="width:3%"></td>
+<td style="width:32%; vertical-align:top;">
+  <div class="bloque">
+    <h3>Información Adicional</h3>
+    <p>{{ informacion_adicional }}</p>
+  </div>
+  <div class="bloque">
+    <h3>Nota Importante</h3>
+    <p>{{ nota_importante }}</p>
+  </div>
+  <div class="bloque">
+    <h3>Campañas Activas</h3>
+    <p>{{ campanas_activas }}</p>
+  </div>
+</td>
+</tr>
+</table>
+
+
+
+<!-- DETALLE GENERAL UNIFICADO -->
+<div style="page-break-before: always; margin-top: 10px;">
+  <h1>Detalle de Operaciones de Venta VISANET:</h1>
+  <table class="tabla-general" style="width:100%;">
+    <thead>
+      <tr>
+        <th style="width:4%;">#</th>
+        <th style="width:18%;">Fecha</th>
+        <th style="width:10%;">Hora</th>
+        <th style="width:6%;">POS</th>
+        <th style="width:18%;">Nro. Operación</th>
+        <th style="width:15%; text-align:right;">Importe de Venta (S/)</th>
+        <th style="width:15%; text-align:right;">Imp. Com. Inc. IGV (S/)</th>
+        <th style="width:15%; text-align:right;">Importe Abonado (S/)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for op in detalle_adquirencia %}
+      <tr>
+        <td style="text-align:center;">{{ loop.index }}</td>
+        <td>{{ op.fecha }}</td>
+        <td>{{ op.hora }}</td>
+        <td style="text-align:center;">{{ op.pos }}</td>
+        <td>{{ op.numero_operacion }}</td>
+        <td style="text-align:right;">{{ op.importe_venta | round(2) }}</td>
+        <td style="text-align:right;">{{ op.comision_venta | round(2) }}</td>
+        <td style="text-align:right;">{{ op.importe_abonado | round(2) }}</td>
+      </tr>
+      {% endfor %}
+      <tr class="subtotal">
+        <td colspan="5">Total</td>
+        <td style="text-align:right;">{{ detalle_adquirencia | sum(attribute='importe_venta') | round(2) }}</td>
+        <td style="text-align:right;">{{ detalle_adquirencia | sum(attribute='comision_venta') | round(2) }}</td>
+        <td style="text-align:right;">{{ detalle_adquirencia | sum(attribute='importe_abonado') | round(2) }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+<div class="footer">
+  <span>Documento generado automáticamente – <strong>KasNet {{ nombre_mes }} {{ anio }}</strong></span>
+</div>
+
+</body>
+</html>

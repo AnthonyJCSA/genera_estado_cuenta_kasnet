@@ -1,0 +1,8 @@
+pandas
+jinja2
+pdfkit
+boto3
+pyarrow
+smtplib
+s3fs
+

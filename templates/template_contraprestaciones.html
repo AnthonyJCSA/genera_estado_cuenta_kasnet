@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Estado de Cuenta - Agente {{ cod_agente }}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.4;
+    font-size: 11px;
+    color: #000;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* === ENCABEZADO === */
+  .header {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .header img {
+    width: 100%;
+    max-height: 90px;
+    display: block;
+  }
+
+  h1 {
+    font-size: 14px;
+    margin: 8px 0;
+    font-weight: bold;
+  }
+
+  .info-text {
+    margin-bottom: 15px;
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  .info-text p {
+    margin: 4px 0;
+    word-spacing: 1px;
+    letter-spacing: 0.3px;
+  }
+
+  .info-text strong {
+    font-weight: bold;
+  }
+
+  /* === TABLAS === */
+  table {
+    border-collapse: collapse;
+    margin-top: 8px;
+  }
+
+  .tabla-general {
+    width: 100%;
+    border: 1px solid #004990;
+  }
+
+  .tabla-general th, .tabla-general td {
+    border: 1px solid #004990;
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  .tabla-general th {
+    background-color: #FFD200;
+    color: #004990;
+    font-weight: bold;
+  }
+
+  .titulo-seccion {
+    background-color: #FFD200;
+    color: #004990;
+    font-weight: bold;
+    text-align: center;
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .subtotal {
+    background-color: #004990;
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .concepto-col {
+    width: 80%;
+  }
+
+  .importe-col {
+    width: 20%;
+    text-align: right;
+  }
+
+  /* === BLOQUES DERECHA === */
+  .bloque {
+    border: 1px solid #004990;
+    background-color: #fff;
+    padding: 6px;
+    font-size: 10.5px;
+    margin-bottom: 5px;
+  }
+
+  .bloque h3 {
+    margin: 0 0 3px 0;
+    font-size: 11px;
+    background-color: #004990;
+    color: white;
+    padding: 4px;
+  }
+
+  /* === TOTAL FINAL === */
+  .tabla-total {
+    width: 100%;
+    border: 1px solid #004990;
+    margin-top: 8px;
+  }
+
+  .tabla-total td {
+    border: 1px solid #004990;
+    padding: 8px;
+    background-color: #FFD200;
+    color: #004990;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: right;
+    vertical-align: middle;
+  }
+
+  .tabla-total td:first-child {
+    text-align: left;
+  }
+
+.footer {
+  text-align: center;
+  font-size: 9px;
+  color: #004990;
+  margin-top: 50px;
+}
+
+
+</style>
+</head>
+<body>
+
+<!-- ===================== -->
+<!--  PRIMERA PÁGINA       -->
+<!-- ===================== -->
+
+<div class="header">
+  <img src="data:image/png;base64,{{ logo_base64 }}" alt="Kasnet Encabezado">
+</div>
+
+<h1>Listado de Operaciones del Mes - Agente KasNet</h1>
+
+<div class="info-text">
+  <p><strong>ID.Agente:</strong> {{ cod_agente }} - <strong>{{ nombre_agente }}</strong></p>
+  <p><strong>Periodo:</strong> {{ nombre_mes }} {{ anio }}</p>
+  <p><strong>Titular:</strong> {{ titular }}</p>
+  <p><strong>Dirección:</strong> {{ direccion }}</p>
+  <p><strong>Provincia:</strong> {{ provincia }} - <strong>Departamento:</strong> {{ departamento }}</p>
+</div>
+
+<table style="width:100%;">
+<tr>
+<td style="width:65%; vertical-align:top;">
+
+  <!-- RESUMEN POR ENTIDAD FINANCIERA -->
+  <table class="tabla-general">
+    <thead>
+      <tr>
+        <th>ENTIDADES</th>
+        <th>CANTIDAD DE OPERACIONES</th>
+        <th>CONTRAPRESTACIÓN (S/)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entidad in resumen_entidades %}
+      <tr>
+        <td>{{ entidad.descripcion_entidad }}</td>
+        <td>{{ entidad.cantidad }}</td>
+        <td style="text-align:right;">{{ entidad.total_comision | round(2) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr class="subtotal">
+        <td>Sub. Total (A)</td>
+        <td>{{ subtotal_operaciones_cantidad }}</td>
+        <td style="text-align:right;">{{ subtotal_operaciones | round(2) }}</td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <!-- TABLA BONOS -->
+  {% if bonos %}
+  <table class="tabla-general">
+    <thead>
+      <tr>
+        <th colspan="2" class="titulo-seccion">BONOS</th>
+      </tr>
+      <tr>
+        <th class="concepto-col">Concepto</th>
+        <th class="importe-col">Importe (S/)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bono in bonos %}
+      <tr>
+        <td>{{ bono.descripcion }}</td>
+        <td class="importe-col">{{ bono.monto | round(2) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr class="subtotal">
+        <td>Sub. Total (B)</td>
+        <td class="importe-col">{{ subtotal_bonos | round(2) }}</td>
+      </tr>
+    </tfoot>
+  </table>
+  {% endif %}
+
+  <!-- TABLA DEVOLUCIONES Y DESCUENTOS -->
+  {% if descuentos %}
+  <table class="tabla-general">
+    <thead>
+      <tr>
+        <th colspan="2" class="titulo-seccion">DEVOLUCIONES Y DESCUENTOS</th>
+      </tr>
+      <tr>
+        <th class="concepto-col">Concepto</th>
+        <th class="importe-col">Importe (S/)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for desc in descuentos %}
+      <tr>
+        <td>{{ desc.descripcion }}</td>
+        <td class="importe-col">{{ desc.monto | round(2) }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+    <tfoot>
+      <tr class="subtotal">
+        <td>Sub. Total (C)</td>
+        <td class="importe-col">{{ subtotal_descuentos | round(2) }}</td>
+      </tr>
+    </tfoot>
+  </table>
+  {% endif %}
+
+<!-- TABLA TOTAL FINAL -->
+<table class="tabla-total">
+
+<tr>
+  <td>A + B + C</td>
+  <td>{{ total_sin_igv | round(2) }}</td>
+</tr>
+<tr>
+  <td>IGV (S/)</td>
+  <td>{{ igv_total | round(2) }}</td>
+</tr>
+<tr>
+  <td>Depósito Total (S/):</td>
+  <td>{{ total_deposito | round(2) }}</td>
+</tr>
+
+
+</table>
+
+</td>
+
+<td style="width:3%"></td>
+
+<td style="width:32%; vertical-align:top;">
+  <div class="bloque">
+    <h3>Información Adicional</h3>
+    <p>{{ informacion_adicional }}</p>
+  </div>
+  <div class="bloque">
+    <h3>Nota Importante</h3>
+    <p>{{ nota_importante }}</p>
+  </div>
+  <div class="bloque">
+    <h3>Campañas Activas</h3>
+    <p>{{ campanas_activas }}</p>
+  </div>
+</td>
+</tr>
+</table>
+
+
+
+
+<!-- ===================== -->
+<!-- DETALLES POR ENTIDAD -->
+<!-- ===================== -->
+
+{% for entidad in detalle_entidades %}
+<div style="{% if loop.first %}page-break-before: always;{% else %}page-break-inside: avoid;{% endif %} margin-top: 10px;">
+
+  <h1>Entidad Financiera: {{ entidad.nombre }}</h1>
+
+  <table class="tabla-general" style="width:100%;">
+    <thead>
+      <tr>
+        <th style="width:4%;">#</th>
+        <th style="width:25%;">Entidad Financiera</th> <!--NUEVO -->
+        <th style="width:12%;">Fecha</th>
+        <th style="width:34%;">Descripción</th>
+        <th style="width:5%;">POS</th>
+        <th style="width:15%;">Nro. Operación</th>
+        <th style="width:15%; text-align:right;">Importe (S/)</th>
+        <th style="width:15%; text-align:right;">Contraprestación (S/)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for op in entidad.operaciones %}
+      <tr>
+        <td style="text-align:center;">{{ loop.index }}</td>
+        <td>{{ op.entidad_financiera }}</td>  <!--NUEVO -->
+        <td>{{ op.fecha }}</td>
+        <td>{{ op.descripcion }}</td>
+        <td style="text-align:center;">{{ op.pos }}</td>
+        <td>{{ op.numero_operacion }}</td>
+        <td style="text-align:right;">{{ op.importe | round(2) }}</td>
+        <td style="text-align:right;">{{ op.comision | round(2) }}</td>
+      </tr>
+
+      {% if loop.last %}
+      <tr class="subtotal">
+        <td colspan="7">Sub Total</td>
+        <td style="text-align:right;">
+          {{ entidad.operaciones | sum(attribute='comision') | round(2) }}
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endfor %}
+
+<div class="footer">
+  <span>Documento generado automáticamente – <strong>KasNet {{ nombre_mes }} {{ anio }}</strong></span>
+</div>
+
+</body>
+</html>
+
+
+
+
+
+

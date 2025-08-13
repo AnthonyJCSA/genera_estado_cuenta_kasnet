@@ -1,0 +1,81 @@
+{
+  "periodo": {
+    "mes": 7,
+    "anio": 2025,
+    "reproceso": false
+  }
+,
+  "rutas": {
+    "logo": "logo_kasnet.png",
+    
+    "template_contraprestaciones": "templates/template_contraprestaciones.html",
+    "template_reembolso": "templates/template_reembolso.html",
+    "template_adquirencia": "templates/template_adquirencia.html",
+    "salida_logs": "output/logs_detallado_202506.log",
+    "salida_resumen": "output/resumen_ejecucion_202506.json",
+    "salida_s3": 
+    {
+    "contraprestacion": "s3://staccprodestadosdecuenta/estados-cuenta/contraprestacion/",
+    "reembolso": "s3://staccprodestadosdecuenta/estados-cuenta/reembolso/",
+    "adquirencia": "s3://staccprodestadosdecuenta/estados-cuenta/adquirencia/"
+    }
+
+  },
+
+  "s3": {
+    "input": {
+      "bucket": "kn-internal-delivery-dtldevs3",
+      "base_path": "tecnologia/estados_cuenta/agente",
+      "archivos": {
+        "agentes": "agentes",
+        "contraprestacion": "contraprestacion",
+        "bonos": "bonos",
+        "descuentos": "descuentos",
+        "reembolso": "reembolso",
+        "adquirencia": "adquirencia"
+      }
+    },
+    "output": {
+      "bucket": "staccprodestadosdecuenta",
+      "path_contraprestacion": "estados-cuenta/contraprestacion/",
+      "path_reembolso": "estados-cuenta/reembolso/",
+      "path_adquirencia": "estados-cuenta/adquirencia/",
+      "path_resumen": "estados-cuenta/"
+    }
+  },
+
+  "correo": {
+  "remitente": "noreply@kasnet.com",
+  "smtp_host": "email-smtp.us-east-1.amazonaws.com",
+  "smtp_port": 465,
+  "smtp_user": "AKIAWOAVSRCS73GGVNHD",
+  "smtp_password": "BC0yn/GUk1LyYW2nT6DwWW4J8JITh7CnM9fAVyuRl3U4",
+  "asunto": "📣 ¡Agente, llegaron tus estados de cuenta de {NOMBRE_MES} {ANIO}!",
+  "mensaje": "¡Hola, agente!\nTe enviamos los estados de cuenta correspondientes al mes de {NOMBRE_MES} {ANIO}.\nPor favor, revísalos detalladamente.\nAtentamente,\n\nKasNet Perú.",
+  "destinatario_pruebas": "prasimon@kasnet.com",
+  "enviar_a_todos": true
+  },
+  "opciones": {
+    "validar_correo": true,
+    "generar_pdf_agentes_sin_bonos_descuentos": true,
+    "log_detallado": true,
+    "resumen_final": true
+  },
+  "textos_fijos": {
+    "informacion_adicional": "¡Tus operaciones del Banco de la Nación te ayudan a ganar! Llega a tu meta de operaciones del mes de agosto y gana ¡sin sorteos! Averigua tu meta con tu operador o supervisor zonal.",
+    "nota_importante": "¡Llegó Mastercard! Ahora tus clientes podrán pagar sus compras con su tarjeta Mastercard en tu POS KasNet.",
+    "campanas_activas": "Llega a tu meta de operaciones de recaudos y retiros de efectivo de Yape o Plin y ¡gana hasta S/150!"
+  }
+  ,
+"ejecucion": {
+  "generar_contraprestacion": false,
+  "generar_reembolso": false,
+  "generar_adquirencia": false,
+  "enviar_correos": true,
+  "agentes_especificos": []
+}
+}
+
+
+
+
